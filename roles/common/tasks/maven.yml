@@ -1,0 +1,21 @@
+- name: Install maven
+  ansible.builtin.dnf:
+    name: maven
+    state: installed
+
+- name: App presetup
+  ansible.builtin.import_tasks:
+    file: app_presetup.yml
+
+- name: Download App Dependencies
+  ansible.builtin.shell: mvn clean package ; mv target/{{ component }}-1.0.jar
+  args:
+    chdir: /app
+
+- name: Install mysql clinet
+  ansible.builtin.import_tasks:
+    file: mysql.yml
+
+- name: Setup {{ component }} service
+  ansible.builtin.import_tasks:
+    file: systemd.yml

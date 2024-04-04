@@ -1,0 +1,28 @@
+- name: Disable nodejs-10 version
+  ansible.builtin.shell: dnf module disable nodejs -y
+
+- name: Enable nodejs-18 version
+  ansible.builtin.shell: dnf module disable nodejs -y
+
+- name: Install nodejs
+  ansible.builtin.dnf:
+    name: nodejs
+    state: installed
+
+- name: Load app presetup
+  ansible.builtin.import_tasks:
+    file: app_presetup.yml
+
+- name: Download App Dependencies
+  ansible.builtin.shell: npm install
+  args:
+    chdir: /app
+
+- name: Load mongod schema
+  ansible.builtin.import_tasks:
+    file: mongod_schema.yml
+  when: load_schema
+
+- name: Load systemd
+  ansible.builtin.import_tasks:
+    file: systemd.yml

@@ -14,7 +14,7 @@
 
 - name: Install mysql clinet
   ansible.builtin.import_tasks:
-    file: mysql.yml
+    file: mysql_schema.yml
 
 - name: Setup {{ component }} service
   ansible.builtin.import_tasks:
